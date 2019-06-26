@@ -1,0 +1,15 @@
+{
+	"name": "e-mmer/harvest-to-tempo",
+	"description": "The tunnel between the awesome Harvest api and the horrible Jira Tempo shit :)",
+	"type": "project",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Maurits Meester",
+			"email": "maurits@e-mmer.nl"
+		}
+	],
+	"require": {
+		"valsplat/harvest-php-client": "^1.0"
+	}
+}
