@@ -55,7 +55,6 @@ foreach($entries as $entry){
     }else {
       file_put_contents(__DIR__ . '/process_cron.log', '['.date("F j, Y, g:i a").'][ERROR]['.$response->code.']: '.$response->body->errors[0]->message.PHP_EOL, FILE_APPEND);
     }
-    break;
   }
 }
 
