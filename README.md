@@ -19,6 +19,11 @@ composer install
 ### Setup Server variables
 Use `env.valet.example` as a reference for needed variables, if you use Valet plus rename this file to `env.valet` and fill out credentials and tokens.
 
+### Run it
+```shell
+php tunnel.php
+```
+
 ## Needed Tokens
 
 In order to make this work you need personalised tokens from Harvest, Tempo and Jira
