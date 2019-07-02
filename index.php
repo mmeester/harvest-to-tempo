@@ -12,21 +12,14 @@ $entries = $harvest->timeEntry()->list(['project_id'=>$project_id]);
 
 $headers = array( 'Accept' => 'application/json' );
 
-// basic auth
-\Unirest\Request::auth( $_SERVER['ATLASSIAN_USER'], $_SERVER['ATLASSIAN_TOKEN'] );
-
-
 foreach($entries as $entry){
 	preg_match('/^(GAZELLEB2C-\d+|BBB-\d+|FOCUS-\d+|KAL-\d+|CDB2BGAZ-\d+|MT-\d+)*$/', $entry->notes, $matches);
 	if($matches){ 
 		$matches['note'] = $entry->notes;
 		$matches['time'] = $entry->hours;
 		
-		$response = Unirest\Request::get(
-			'https://'.$_SERVER['JIRA_INSTANCE'].'.atlassian.net/rest/api/3/search?fields=project,issuetype,timeestimate,timeoriginalestimate,timetracking,summary,io.tempo.jira__team,io.tempo.jira__account&jql=issue in ("'.$matches[0].'")',
-			$headers
-		);
-		$jiraId = $response->body->issues[0]->id;
+		// BBB workload to fill out
+		// {"attributes":{"_Account_":{"workAttributeId":3,"value":"BBB-ENH-B2C"}},"billableSeconds":null,"workerId":"557058:b79dc083-8dc6-41b0-998c-1cb6710b60cb","comment":null,"started":"2019-07-01","timeSpentSeconds":3600,"originTaskId":"21559","remainingEstimate":null,"endDate":null,"includeNonWorkingDays":false}
 		var_dump($jiraId);
 		break;
 		
