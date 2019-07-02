@@ -32,7 +32,11 @@ In order to make this work you need personalised tokens from Harvest, Tempo and 
 - Tempo: Go to your Tempo dashboard in Jira -> Settings -> API Integration
 - Jira: https://id.atlassian.com/manage/api-tokens
 
-## ToDo
+To find your Harvest account ID go to https://id.getharvest.com/accounts and see what the id is when you inspect the link to the specific account.
+
+To find your Harvest project id, go to your account and the specific project and detect
+
+## To-do
 - [ ] Create wizard for setup
 - [ ] Move entire code to Laravel
 - [ ] Setup multi-tunnel -> multiple harvest accounts to multiple tempo environments
