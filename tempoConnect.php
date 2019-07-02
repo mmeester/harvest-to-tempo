@@ -13,8 +13,7 @@ if(!isset($_GET['code'])) : ?>
               'client_secret' => $_SERVER['TEMPO_CLIENT_SECRET'],
               'redirect_uri' => $_SERVER['TEMPO_REDIRECT'],
               'code' => $_GET['code'] );
-
-  $response = Unirest\Request::post('https://api.tempo.io/oauth/token/', $headers, $query);
+  $response = Unirest\Request::post( $_SERVER['tempoBase'] . '/oauth/token/', $headers, $query);
   
   // Save the token to a file.
   if (!file_exists(dirname($_SERVER['tokenPath']))) {
