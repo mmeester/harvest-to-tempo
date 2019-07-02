@@ -7,25 +7,27 @@ $connection->setAccessToken($_SERVER['HARVEST_ACCESS_TOKEN']);
 $connection->setAccountId($_SERVER['HARVEST_ACCOUNT_ID']);
 
 $harvest = new \Valsplat\Harvest\Harvest($connection);
-$project_id = 21322146; // MIXED TEAM project
 
-$entries = $harvest->timeEntry()->list(['project_id'=>$project_id]);
+$entries = $harvest->timeEntry()->list([
+              'project_id'=> $_SERVER['HARVEST_PROJECT_ID'],
+              'from' => date('Y-m-d', time() - 60 * 60 * 24)
+            ]);
 
 $headers = array( 'Accept' => 'application/json' );
+
 Unirest\Request::auth( $_SERVER['ATLASSIAN_USER'], $_SERVER['ATLASSIAN_TOKEN'] );
 
 $response = Unirest\Request::get('https://'.$_SERVER['JIRA_INSTANCE'].'.atlassian.net/rest/api/3/myself', $headers );
 $accountId = $response->body->accountId;
 
-$tokens = json_decode(file_get_contents($_SERVER['tokenPath']), true);
+
 
 foreach($entries as $entry){
-  preg_match('/^(GAZELLEB2C-\d+|BBB-\d+|FOCUS-\d+|KAL-\d+|CDB2BGAZ-\d+|MT-\d+)*$/', $entry->notes, $matches);
+  preg_match($_SERVER['JIRA_TICKETS'], $entry->notes, $matches);
   if($matches){ 
-    $matches['note'] = $entry->notes;
-    $matches['time'] = $entry->hours;
-    
-    $headers['Authorization'] = 'Bearer ' . $tokens['access_token'];
+    $project = explode('-', $matches[0]);
+    $account = $_SERVER['ACCOUNT_MAPPING'][ $project[0] ];
+    $headers['Authorization'] = 'Bearer '.$_SERVER['TEMPO_ACCESS_TOKEN'];
     
     $d = new DateTime($entry->timer_started_at);
     
@@ -37,16 +39,16 @@ foreach($entries as $entry){
               'description' => $entry->notes,
               'authorAccountId' =>  $accountId,
               'attributes' => [
-                ['key' =>  '_Account_','value' => 'KAL-ENH-B2C']
+                [
+                  'key' =>  '_Account_',
+                  'value' => $account
+                ]
               ]
             ];
     $body = Unirest\Request\Body::json($data);
     
     $response = Unirest\Request::post( $_SERVER['tempoBase'] . '/core/3/worklogs', $headers, $body);
-    var_dump($response);
-    // var_dump($_SERVER['tempoBase'] . '/core/3/worklogs');
-    // var_dump($headers);
-    // var_dump($body);
+    
     break;
     
   }
